@@ -7,34 +7,17 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import UseFetch from "../hooks/useFetch";
 
 function Search() {
-  const [loading, setLoading] = useState(false);
   const [value, setValue] = React.useState(null);
-  const [data, setData] = useState([]);
-  const fetchData = async (string) => {
-    const url = `https://api.themoviedb.org/3/search/multi?query=${string}&include_adult=false&language=en-US&page=1`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YTY5ZDhkMmZhMDZhYzU5OGVhYjMwNTgzY2Y3ZTBlZSIsInN1YiI6IjY0Y2NhMjZmNzk4ZTA2MDEwMDBlNjhjNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.c6rtmLqA72C8UkKJlsVjPzKBaITdGAB774PtiN9ouks",
-      },
-    };
 
-    setLoading(true);
-    await fetch(url, options)
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        setData(json["results"].filter((e) => e["media_type"] !== "person"));
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("error:" + err);
-        setLoading(false);
-      });
+  const [fetchData, data, isPending, error] = UseFetch();
+
+  const handleChange = async (string) => {
+    const url = `https://api.themoviedb.org/3/search/multi?query=${string}&include_adult=false&language=en-US&page=1`;
+
+    await fetchData(url);
   };
   return (
     <Container sx={{ mt: 5 }}>
@@ -43,19 +26,19 @@ function Search() {
           <Autocomplete
             freeSolo
             autoFocus
-            options={data}
+            options={data ? data["results"] : []}
             getOptionLabel={(option) => {
               if (option["media_type"] === "tv") return option["name"];
               if (option["media_type"] === "movie") return option["title"];
             }}
             fullWidth
-            loading={loading}
+            loading={isPending}
             value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
             onInputChange={(event, newInputValue) => {
-              fetchData(newInputValue);
+              handleChange(newInputValue);
             }}
             renderOption={(props, option) => (
               <Box
@@ -83,13 +66,14 @@ function Search() {
             )}
             renderInput={(params) => (
               <TextField
+                variant="filled"
                 {...params}
                 label="Search Movies, TV Series etc."
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
                     <React.Fragment>
-                      {loading ? (
+                      {isPending ? (
                         <CircularProgress color="inherit" size={20} />
                       ) : null}
                       {params.InputProps.endAdornment}
