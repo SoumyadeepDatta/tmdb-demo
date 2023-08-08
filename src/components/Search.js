@@ -7,18 +7,11 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import UseFetch from "../hooks/useFetch";
+import { useDataContext } from "../contexts/DataContext";
 
 function Search() {
-  const [value, setValue] = React.useState(null);
-
-  const [fetchData, data, isPending, error] = UseFetch();
-
-  const handleChange = async (string) => {
-    const url = `https://api.themoviedb.org/3/search/multi?query=${string}&include_adult=false&language=en-US&page=1`;
-
-    await fetchData(url);
-  };
+  const [value, setValue] = useState(null);
+  const { searchData, setSearchData } = useDataContext();
   return (
     <Container sx={{ mt: 5 }}>
       <Grid container>
@@ -26,19 +19,19 @@ function Search() {
           <Autocomplete
             freeSolo
             autoFocus
-            options={data ? data["results"] : []}
+            options={searchData.data ? searchData.data["results"] : []}
             getOptionLabel={(option) => {
               if (option["media_type"] === "tv") return option["name"];
               if (option["media_type"] === "movie") return option["title"];
             }}
             fullWidth
-            loading={isPending}
+            loading={searchData.isPending}
             value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
             onInputChange={(event, newInputValue) => {
-              handleChange(newInputValue);
+              setSearchData(newInputValue);
             }}
             renderOption={(props, option) => (
               <Box
@@ -73,7 +66,7 @@ function Search() {
                   ...params.InputProps,
                   endAdornment: (
                     <React.Fragment>
-                      {isPending ? (
+                      {searchData.isPending ? (
                         <CircularProgress color="inherit" size={20} />
                       ) : null}
                       {params.InputProps.endAdornment}
