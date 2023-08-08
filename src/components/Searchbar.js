@@ -11,7 +11,7 @@ import { useDataContext } from "../contexts/DataContext";
 
 function Searchbar() {
   const [value, setValue] = useState(null);
-  const { searchData, setSearchData, addToQueryArray, queryArray } =
+  const { searchData, setSearchData, addToQueryArray, getTitleAndName } =
     useDataContext();
   return (
     <Container sx={{ mt: 5 }}>
@@ -21,10 +21,7 @@ function Searchbar() {
             freeSolo
             autoFocus
             options={searchData.data ? searchData.data["results"] : []}
-            getOptionLabel={(option) => {
-              if (option["media_type"] === "tv") return option["name"];
-              if (option["media_type"] === "movie") return option["title"];
-            }}
+            getOptionLabel={(obj) => getTitleAndName(obj)}
             fullWidth
             loading={searchData.isPending}
             value={value}

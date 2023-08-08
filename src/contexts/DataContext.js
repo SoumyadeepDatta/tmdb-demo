@@ -29,6 +29,14 @@ const reducer = (state, action) => {
         ...state,
         queryArray: [...state.queryArray, action.payload],
       };
+    case "DELETE_FROM_QUERY_ARRAY":
+      let newQueryArray = state.queryArray.filter(
+        (e) => e.id !== action.payload
+      );
+      return {
+        ...state,
+        queryArray: newQueryArray,
+      };
   }
 };
 
@@ -54,8 +62,28 @@ const DataProvider = ({ children }) => {
         payload: data,
       });
   };
+
+  const deleteFromQueryArray = (id) => {
+    dispatch({
+      type: "DELETE_FROM_QUERY_ARRAY",
+      payload: id,
+    });
+  };
+
+  const getTitleAndName = (obj) => {
+    if (obj["media_type"] === "tv") return obj["name"];
+    if (obj["media_type"] === "movie") return obj["title"];
+  };
   return (
-    <DataContext.Provider value={{ ...state, setSearchData, addToQueryArray }}>
+    <DataContext.Provider
+      value={{
+        ...state,
+        setSearchData,
+        addToQueryArray,
+        deleteFromQueryArray,
+        getTitleAndName,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );
