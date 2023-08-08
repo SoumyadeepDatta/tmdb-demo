@@ -11,7 +11,8 @@ import { useDataContext } from "../contexts/DataContext";
 
 function Search() {
   const [value, setValue] = useState(null);
-  const { searchData, setSearchData } = useDataContext();
+  const { searchData, setSearchData, addToQueryArray, queryArray } =
+    useDataContext();
   return (
     <Container sx={{ mt: 5 }}>
       <Grid container>
@@ -29,6 +30,7 @@ function Search() {
             value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
+              addToQueryArray(newValue);
             }}
             onInputChange={(event, newInputValue) => {
               setSearchData(newInputValue);
@@ -78,7 +80,7 @@ function Search() {
           />
         </Grid>
       </Grid>
-      {JSON.stringify(value)}
+      {JSON.stringify(queryArray)}
     </Container>
   );
 }

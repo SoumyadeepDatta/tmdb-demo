@@ -10,6 +10,7 @@ const initialState = {
     isPending: false,
     error: null,
   },
+  queryArray: [],
 };
 
 const reducer = (state, action) => {
@@ -22,6 +23,11 @@ const reducer = (state, action) => {
           isPending: action.payload.isSearchPending,
           error: action.payload.searchError,
         },
+      };
+    case "ADD_TO_QUERY_ARRAY":
+      return {
+        ...state,
+        queryArray: [...state.queryArray, action.payload],
       };
   }
 };
@@ -40,8 +46,16 @@ const DataProvider = ({ children }) => {
       payload: { searchData, isSearchPending, searchError },
     });
   }, [searchData]);
+
+  const addToQueryArray = (data) => {
+    if (data)
+      dispatch({
+        type: "ADD_TO_QUERY_ARRAY",
+        payload: data,
+      });
+  };
   return (
-    <DataContext.Provider value={{ ...state, setSearchData }}>
+    <DataContext.Provider value={{ ...state, setSearchData, addToQueryArray }}>
       {children}
     </DataContext.Provider>
   );
