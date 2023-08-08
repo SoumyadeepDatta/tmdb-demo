@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import { useDataContext } from "../contexts/DataContext";
 
-function Search() {
+function Searchbar() {
   const [value, setValue] = useState(null);
   const { searchData, setSearchData, addToQueryArray, queryArray } =
     useDataContext();
@@ -80,9 +80,9 @@ function Search() {
           />
         </Grid>
       </Grid>
-      {JSON.stringify(queryArray)}
+      {/* {JSON.stringify(queryArray)} */}
     </Container>
   );
 }
 
-export default Search;
+export default Searchbar;
