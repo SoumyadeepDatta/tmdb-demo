@@ -48,6 +48,44 @@ const reducer = (state, action) => {
         ...state,
         queryArray: action.payload,
       };
+    case "RESET_RESULT":
+      return {
+        ...state,
+        result: {
+          data: null,
+          isPending: false,
+          error: null,
+        },
+      };
+    case "SET_RESULT_DATA":
+      return {
+        ...state,
+        result: {
+          data: action.payload,
+          isPending: false,
+          error: null,
+        },
+      };
+    case "SET_RESULT_PENDING":
+      return {
+        ...state,
+        result: {
+          data: null,
+          isPending: true,
+          error: null,
+        },
+      };
+    case "SET_RESULT_ERROR":
+      return {
+        ...state,
+        result: {
+          data: null,
+          isPending: false,
+          error: action.payload,
+        },
+      };
+    default:
+      return state;
   }
 };
 
@@ -105,6 +143,54 @@ const DataProvider = ({ children }) => {
       payload: newQueryArray,
     });
   };
+  const findPeople = async () => {
+    dispatch({
+      type: "SET_RESULT_PENDING",
+    });
+    /**
+     * Below is the implementation to find the people
+     * who were appeared in all the movies/TV shows
+     * in the searched array
+     */
+    const hashMap = {};
+    const len = state.queryArray.length;
+    for (let query of state.queryArray) {
+      let idArray = query["cast"].map((e) => e.id);
+      idArray = [...new Set(idArray)]; // gets the unique persons
+      for (let id of idArray) {
+        hashMap[id] = hashMap[id] ? hashMap[id] + 1 : 1;
+      }
+    }
+    const commonPeopleIds = Object.keys(hashMap).filter(
+      (e) => hashMap[e] === len
+    );
+    const resultArray = await Promise.all(
+      commonPeopleIds.map(async (e) => {
+        const url = `https://api.themoviedb.org/3/person/${e}?language=en-US`;
+        const person = await fetchSimpleData(url);
+        return person;
+      })
+    ).catch((err) => {
+      dispatch({
+        type: "SET_RESULT_ERROR",
+        payload: err.message,
+      });
+    });
+    dispatch({
+      type: "SET_RESULT_DATA",
+      payload: resultArray,
+    });
+  };
+  useEffect(() => {
+    dispatch({
+      type: "RESET_RESULT",
+    });
+  }, [state.queryArray]);
+
+  const calculate = async () => {
+    await addCast();
+    await findPeople();
+  };
   return (
     <DataContext.Provider
       value={{
@@ -113,7 +199,7 @@ const DataProvider = ({ children }) => {
         addToQueryArray,
         deleteFromQueryArray,
         getTitleAndName,
-        addCast,
+        calculate,
       }}
     >
       {children}

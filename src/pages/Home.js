@@ -5,7 +5,7 @@ import { Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { useDataContext } from "../contexts/DataContext";
 
 function Home() {
-  const { queryArray, result, addCast } = useDataContext();
+  const { queryArray, result, calculate } = useDataContext();
   return (
     <Container>
       <Container sx={{ my: 15 }}>
@@ -34,7 +34,7 @@ function Home() {
             sx={{ m: 5, textTransform: "none" }}
             variant="contained"
             onClick={() => {
-              addCast();
+              calculate();
             }}
           >
             <Typography fontWeight={400} variant="h6">
@@ -44,7 +44,7 @@ function Home() {
           {result.data && <Divider />}
         </Container>
       )}
-      {JSON.stringify(queryArray)}
+      {JSON.stringify(result.data)}
     </Container>
   );
 }
