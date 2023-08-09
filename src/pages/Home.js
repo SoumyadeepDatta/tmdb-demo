@@ -5,7 +5,7 @@ import { Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { useDataContext } from "../contexts/DataContext";
 
 function Home() {
-  const { queryArray, resultArray } = useDataContext();
+  const { queryArray, result } = useDataContext();
   return (
     <Container>
       <Container sx={{ my: 15 }}>
@@ -38,7 +38,7 @@ function Home() {
               Who's there?
             </Typography>
           </Button>
-          {resultArray.length > 0 && <Divider />}
+          {result.data && <Divider />}
         </Container>
       )}
     </Container>

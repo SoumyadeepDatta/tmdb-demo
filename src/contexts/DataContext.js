@@ -11,7 +11,11 @@ const initialState = {
     error: null,
   },
   queryArray: [],
-  resultArray: [],
+  result: {
+    data: null,
+    isPending: false,
+    error: null,
+  },
 };
 
 const reducer = (state, action) => {
