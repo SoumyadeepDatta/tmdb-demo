@@ -1,11 +1,11 @@
 import React from "react";
 import Searchbar from "../components/Searchbar";
 import ItemCard from "../components/ItemCard";
-import { Container, Grid } from "@mui/material";
+import { Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { useDataContext } from "../contexts/DataContext";
 
 function Home() {
-  const { queryArray } = useDataContext();
+  const { queryArray, resultArray } = useDataContext();
   return (
     <Container>
       <Container sx={{ my: 15 }}>
@@ -26,6 +26,21 @@ function Home() {
             </Grid>
           ))}
       </Grid>
+      {queryArray.length > 0 && (
+        <Container sx={{ textAlign: "center" }}>
+          <Divider />
+          <Button
+            size="small"
+            sx={{ m: 5, textTransform: "none" }}
+            variant="contained"
+          >
+            <Typography fontWeight={400} variant="h6">
+              Who's there?
+            </Typography>
+          </Button>
+          {resultArray.length > 0 && <Divider />}
+        </Container>
+      )}
     </Container>
   );
 }

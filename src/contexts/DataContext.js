@@ -11,6 +11,7 @@ const initialState = {
     error: null,
   },
   queryArray: [],
+  resultArray: [],
 };
 
 const reducer = (state, action) => {

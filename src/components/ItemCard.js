@@ -25,6 +25,7 @@ function ItemCard(props) {
       <CardActions sx={{ justifyContent: "center" }}>
         <IconButton
           size="small"
+          color="error"
           onClick={() => {
             deleteFromQueryArray(data.id);
           }}
