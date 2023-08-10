@@ -26,25 +26,47 @@ function Home() {
             </Grid>
           ))}
       </Grid>
-      {queryArray.length > 0 && (
-        <Container sx={{ textAlign: "center" }}>
-          <Divider />
-          <Button
-            size="small"
-            sx={{ m: 5, textTransform: "none" }}
-            variant="contained"
-            onClick={() => {
-              calculate();
-            }}
-          >
-            <Typography fontWeight={400} variant="h6">
-              Who's there?
-            </Typography>
-          </Button>
-          {result.data && <Divider />}
-        </Container>
+      {queryArray.length > 1 && (
+        <>
+          <Container sx={{ textAlign: "center" }}>
+            <Divider />
+            <Button
+              size="small"
+              disabled={result.isPending}
+              sx={{ m: 5, textTransform: "none" }}
+              variant="contained"
+              color="success"
+              onClick={() => {
+                calculate();
+              }}
+            >
+              <Typography fontWeight={400} variant="h6">
+                Find matches
+              </Typography>
+            </Button>
+            {result.data && <Divider />}
+          </Container>
+
+          {result.isPending && <>Loading...</>}
+          {result.error && <>{result.error}</>}
+          {result.data && (
+            <Grid
+              container
+              spacing={{ xs: 2, md: 3 }}
+              sx={{
+                justifyContent: "center",
+                mb: 10,
+              }}
+            >
+              {result.data.length > 0 ? (
+                <>{JSON.stringify(result.data)}</>
+              ) : (
+                <Grid item>No match found!</Grid>
+              )}
+            </Grid>
+          )}
+        </>
       )}
-      {JSON.stringify(result.data)}
     </Container>
   );
 }

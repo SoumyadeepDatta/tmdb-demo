@@ -185,7 +185,7 @@ const DataProvider = ({ children }) => {
     dispatch({
       type: "RESET_RESULT",
     });
-  }, [state.queryArray]);
+  }, [state.queryArray.length]);
 
   const calculate = async () => {
     await addCast();
