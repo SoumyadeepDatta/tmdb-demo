@@ -58,7 +58,7 @@ function Searchbar() {
             )}
             renderInput={(params) => (
               <TextField
-                variant="filled"
+                variant="standard"
                 {...params}
                 label="Search Movies, TV Series etc."
                 InputProps={{

@@ -191,6 +191,23 @@ const DataProvider = ({ children }) => {
     await addCast();
     await findPeople();
   };
+
+  const getPersonRoles = (id) => {
+    const person = state.result.data.filter((e) => e["id"] == id);
+    const roles = state.queryArray.reduce(
+      (a, e) => [
+        ...a,
+        {
+          ...e["cast"].find((c) => c.id == id),
+          name: getTitleAndName(e),
+          image: e["poster_path"],
+          type:e["media_type"]
+        },
+      ],
+      []
+    );
+    return { person, roles };
+  };
   return (
     <DataContext.Provider
       value={{
@@ -200,6 +217,7 @@ const DataProvider = ({ children }) => {
         deleteFromQueryArray,
         getTitleAndName,
         calculate,
+        getPersonRoles,
       }}
     >
       {children}

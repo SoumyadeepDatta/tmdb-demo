@@ -1,7 +1,7 @@
 import React from "react";
 import Searchbar from "../components/Searchbar";
 import ItemCard from "../components/ItemCard";
-import { Button, Container, Divider, Grid, Typography } from "@mui/material";
+import { Container, Divider, Grid, Typography } from "@mui/material";
 import { useDataContext } from "../contexts/DataContext";
 import PersonCard from "../components/PersonCard";
 import { LoadingButton } from "@mui/lab";
