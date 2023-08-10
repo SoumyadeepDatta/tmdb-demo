@@ -80,7 +80,7 @@ function Roles() {
                         secondary={e["roles"].map((r) => (
                           <>
                             {r["character"]}, {r["episode_count"]} episode
-                            {r["episode_count"] > 0 ? "s" : ""}
+                            {r["episode_count"] > 1 ? "s" : ""}
                           </>
                         ))}
                       />
