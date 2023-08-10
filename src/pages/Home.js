@@ -10,7 +10,7 @@ function Home() {
   const { queryArray, result, calculate } = useDataContext();
   return (
     <Container>
-      <Container sx={{ my: 15 }}>
+      <Container sx={{ mt: 15, mb: 5 }}>
         <Searchbar />
       </Container>
       <Grid
@@ -18,7 +18,7 @@ function Home() {
         spacing={{ xs: 2, md: 3 }}
         sx={{
           justifyContent: "center",
-          mb: 10,
+          mb: 5,
         }}
       >
         {queryArray.length > 0 &&
@@ -47,7 +47,7 @@ function Home() {
                 Find matches
               </Typography>
             </LoadingButton>
-            {result.data && <Divider />}
+            {result.data && <Divider sx={{ mb: 3 }} />}
           </Container>
 
           {result.isPending && <>Loading...</>}
