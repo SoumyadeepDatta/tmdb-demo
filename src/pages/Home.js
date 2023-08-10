@@ -2,6 +2,7 @@ import React from "react";
 import Searchbar from "../components/Searchbar";
 import ItemCard from "../components/ItemCard";
 import {
+  Alert,
   CircularProgress,
   Container,
   Divider,
@@ -60,7 +61,11 @@ function Home() {
           <CircularProgress size={50} />
         </Container>
       )}
-      {result.error && <>{result.error}</>}
+      {result.error && (
+        <Container sx={{ textAlign: "center", my: 5 }}>
+          <Alert severity="error">{result.error}</Alert>
+        </Container>
+      )}
       {result.data && (
         <Grid
           container
