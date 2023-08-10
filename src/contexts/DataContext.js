@@ -94,18 +94,7 @@ const DataProvider = ({ children }) => {
   };
   useEffect(() => {
     const url = "/api/authentication";
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${process.env.REACT_APP_AUTH}`,
-      },
-    };
-
-    fetch(url, options)
-      .then((res) => res.json())
-      .then((json) => console.log(json))
-      .catch((err) => console.error("error:" + err));
+    fetchSimpleData(url);
   }, []);
   useEffect(() => {
     dispatch({
