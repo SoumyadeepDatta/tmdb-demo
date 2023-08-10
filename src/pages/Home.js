@@ -3,6 +3,8 @@ import Searchbar from "../components/Searchbar";
 import ItemCard from "../components/ItemCard";
 import { Button, Container, Divider, Grid, Typography } from "@mui/material";
 import { useDataContext } from "../contexts/DataContext";
+import PersonCard from "../components/PersonCard";
+import { LoadingButton } from "@mui/lab";
 
 function Home() {
   const { queryArray, result, calculate } = useDataContext();
@@ -30,11 +32,12 @@ function Home() {
         <>
           <Container sx={{ textAlign: "center" }}>
             <Divider />
-            <Button
+            <LoadingButton
               size="small"
-              disabled={result.isPending}
+              loading={result.isPending}
               sx={{ m: 5, textTransform: "none" }}
               variant="contained"
+              loadingPosition="center"
               color="success"
               onClick={() => {
                 calculate();
@@ -43,7 +46,7 @@ function Home() {
               <Typography fontWeight={400} variant="h6">
                 Find matches
               </Typography>
-            </Button>
+            </LoadingButton>
             {result.data && <Divider />}
           </Container>
 
@@ -59,7 +62,13 @@ function Home() {
               }}
             >
               {result.data.length > 0 ? (
-                <>{JSON.stringify(result.data)}</>
+                <>
+                  {result.data.map((e) => (
+                    <Grid item key={e.id}>
+                      <PersonCard data={e} />
+                    </Grid>
+                  ))}
+                </>
               ) : (
                 <Grid item>No match found!</Grid>
               )}
