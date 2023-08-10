@@ -89,7 +89,7 @@ const DataProvider = ({ children }) => {
     UseFetch();
   const fetchSimpleData = useSimpleFetch();
   const setSearchData = async (string) => {
-    const url = `https://api.themoviedb.org/3/search/multi?query=${string}&include_adult=false&language=en-US&page=1`;
+    const url = `/api/search/multi?query=${string}&include_adult=false&language=en-US&page=1`;
     await fetchSearchData(url);
   };
   useEffect(() => {
@@ -122,7 +122,7 @@ const DataProvider = ({ children }) => {
   const addCast = async () => {
     const newQueryArray = await Promise.all(
       state.queryArray.map(async (e) => {
-        const url = `https://api.themoviedb.org/3/${e["media_type"]}/${
+        const url = `/api/${e["media_type"]}/${
           e["id"]
         }/${
           e["media_type"] === "tv" ? "aggregate_" : ""
@@ -160,7 +160,7 @@ const DataProvider = ({ children }) => {
     );
     const resultArray = await Promise.all(
       commonPeopleIds.map(async (e) => {
-        const url = `https://api.themoviedb.org/3/person/${e}?language=en-US`;
+        const url = `/api/person/${e}?language=en-US`;
         const person = await fetchSimpleData(url);
         return person;
       })
