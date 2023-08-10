@@ -9,12 +9,18 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 function PersonCard(props) {
   const data = props.data;
+  const history = useHistory();
   return (
     <Card sx={{ width: 345, height: 100 }}>
-      <CardActionArea>
+      <CardActionArea
+        onClick={() => {
+          history.push(`/${data.id}`);
+        }}
+      >
         <CardContent>
           <ListItem>
             <ListItemAvatar>
