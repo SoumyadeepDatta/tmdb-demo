@@ -93,6 +93,21 @@ const DataProvider = ({ children }) => {
     await fetchSearchData(url);
   };
   useEffect(() => {
+    const url = "/api/authentication";
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_AUTH}`,
+      },
+    };
+
+    fetch(url, options)
+      .then((res) => res.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.error("error:" + err));
+  }, []);
+  useEffect(() => {
     dispatch({
       type: "SET_SEARCH_DATA",
       payload: { searchData, isSearchPending, searchError },
@@ -122,9 +137,7 @@ const DataProvider = ({ children }) => {
   const addCast = async () => {
     const newQueryArray = await Promise.all(
       state.queryArray.map(async (e) => {
-        const url = `/api/${e["media_type"]}/${
-          e["id"]
-        }/${
+        const url = `/api/${e["media_type"]}/${e["id"]}/${
           e["media_type"] === "tv" ? "aggregate_" : ""
         }credits?language=en-US`;
         const credits = await fetchSimpleData(url);
