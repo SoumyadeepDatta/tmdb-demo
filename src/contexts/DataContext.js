@@ -48,15 +48,6 @@ const reducer = (state, action) => {
         ...state,
         queryArray: action.payload,
       };
-    case "RESET_RESULT":
-      return {
-        ...state,
-        result: {
-          data: null,
-          isPending: false,
-          error: null,
-        },
-      };
     case "SET_RESULT_DATA":
       return {
         ...state,
@@ -90,7 +81,10 @@ const reducer = (state, action) => {
 };
 
 const DataProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(
+    reducer,
+    JSON.parse(localStorage.getItem("tmdb")) || initialState
+  );
   const [fetchSearchData, searchData, isSearchPending, searchError] =
     UseFetch();
   const fetchSimpleData = useSimpleFetch();
@@ -181,11 +175,6 @@ const DataProvider = ({ children }) => {
       payload: resultArray,
     });
   };
-  useEffect(() => {
-    dispatch({
-      type: "RESET_RESULT",
-    });
-  }, [state.queryArray.length]);
 
   const calculate = async () => {
     await addCast();
@@ -193,21 +182,33 @@ const DataProvider = ({ children }) => {
   };
 
   const getPersonRoles = (id) => {
-    const person = state.result.data.filter((e) => e["id"] == id);
-    const roles = state.queryArray.reduce(
-      (a, e) => [
-        ...a,
-        {
-          ...e["cast"].find((c) => c.id == id),
-          name: getTitleAndName(e),
-          image: e["poster_path"],
-          type:e["media_type"]
-        },
-      ],
-      []
-    );
+    let person = null;
+    let roles = null;
+    if (
+      state.result.data &&
+      state.result.data.map((e) => e.id).includes(Number(id))
+    ) {
+      person = state.result.data.filter((e) => e["id"] == id);
+      roles = state.queryArray.reduce(
+        (a, e) => [
+          ...a,
+          {
+            ...e["cast"].find((c) => c.id == id),
+            name: getTitleAndName(e),
+            image: e["poster_path"],
+            type: e["media_type"],
+          },
+        ],
+        []
+      );
+    }
     return { person, roles };
   };
+
+  useEffect(() => {
+    localStorage.setItem("tmdb", JSON.stringify(state));
+  }, [state]);
+
   return (
     <DataContext.Provider
       value={{
